@@ -1,2 +1,3 @@
-TLR/Results/
+*.soft
+*.gz
 *.sqlite

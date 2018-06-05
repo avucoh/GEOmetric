@@ -24,7 +24,7 @@ gses <- readLines("test.txt")
 
 # Download the GSE
 getSamples <- function(gse) {
-  eset <- getGEO(GEO = gse, destdir = GEOtemp)[[1]]
+  eset <- getGEO(GEO = gses, destdir = GEOtemp)[[1]]
   pData(eset)
 }
 
