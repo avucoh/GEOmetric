@@ -1,0 +1,70 @@
+GSE	BioSampName	BioSampId	xpType	XP	Contrast	Formula	Node	NodeFunction	BSM	BSMDCD	BSMDCD2	Comment
+GSE4445	B lymphocytes		2CDirectDyeSwap	1	TLR7 OE vs (WT) |	A	TLR7	OE				
+GSE22124	RAW macrophages		1C|TS	1	R848 vs (Veh) | 1h	A-b			R848	1h	0.1 uM	
+GSE22124	RAW macrophages		1C|TS	1	R848 vs (Veh) | 3h	E-d			R848	3h	0.1 uM	
+GSE22124	RAW macrophages		1C|TS	1	R848 vs (Veh) | 7h	G-e			R848	7h	0.1 uM	
+GSE22124	RAW macrophages		1C|TS	1	R848 vs (Veh) | 22h	C-c			R848	22h	0.1 uM	
+GSE22124	RAW macrophages		1C|TS	1	R848;apilimod vs R848 | 7h	H-G			apilimod	7h	1 uM	
+GSE22124	RAW macrophages		1C|TS	1	R848;apilimod vs R848 | 1h	B-A			apilimod	1h	1 uM	
+GSE22124	RAW macrophages		1C|TS	1	R848;apilimod vs R848 | 3h	F-E			apilimod	3h	1 uM	
+GSE22124	RAW macrophages		1C|TS	1	R848;apilimod vs R848 | 7h	H-G			apilimod	7h	1 uM	
+GSE22124	RAW macrophages		1C|TS	1	R848;apilimod vs R848 | 22h	D-C			apilimod	22h	1 uM	
+GSE64480	monocytes		1C	1	3M-055 vs (Veh) | 12h	A-a			3M-055	12h	1 uM	
+GSE64480	monocytes		1C	1	VTX-2337 vs (Veh) | 12h	B-a			VTX-2337	12h	1 uM	
+GSE67057	dendritic cells		1C	1	3M-003 vs (Veh) | 1h	A-a			3M-003	1h	5 uM	
+GSE67057	dendritic cells		1C	1	3M-003 vs (Veh) | 6h	B-a			3M-003	6h	5 uM	
+GSE41825	dendritic cells		1C	1	ODN2216 vs (Veh) | 3h	C-a			ODN2216	3h	1 uM	
+GSE41825	dendritic cells		1C	1	gardiquimod vs (Veh) | 3h	A-a			gardiquimod	3h	5 uM	
+GSE41825	dendritic cells		1C	1	gardiquimod;BTKi (RN486) vs (Veh) | 3h	B-a			gardiquimod	3h	5 uM;1 uM	
+GSE77145	B lymphocytes		1C	1	TBX21 LOF vs (WT) | ODN1826;IFNg 20h	A-a	TBX21	LOF				
+GSE77145	B lymphocytes		1C	1	TBX21 LOF vs (WT) | ODN1826;IL21 20h	B-b	TBX21	LOF				
+GSE79272	dendritic cells		Htseq	1	CpG vs (Veh) | 18h	B-A			CpG	18h	0.5 uM	
+GSE79272	dendritic cells		Htseq	1	imiquimod vs (Veh) | 18h	C-A			imiquimod	18h	0.5 ug/ml	
+GSE81527	PBMC		1C	1	gardiquimod 5h vs (Veh) |	b-a			gardiquimod	5h	5 ug/ml	
+GSE81527	PBMC		1C	1	BMS-986126;gardiquimod 30m;5h vs gardiquimod 5h |	A-b			BMS-986126	30m	5 uM	
+GSE94380	CD11b+ dendritic cells		1C	1	R848 9h vs (Veh) |	B-A			R848	9h	10 ug	
+GSE94380	CD8a+ dendritic cells		1C	1	R848 9h vs (Veh) |	B-A			R848	9h	10 ug	
+GSE7831	dendritic cells		1C	1	PR8 (flu) vs (Veh) | 1h	B-a			PR8 (flu)	1h	300 HAU/ml	
+GSE7831	dendritic cells		1C	1	PR8 (flu) vs (Veh) | 4h	D-b			PR8 (flu)	4h	300 HAU/ml	
+GSE7831	dendritic cells		1C	1	CpG1826 vs (Veh) | 1h	A-a			CpG1826	1h	5 ug/ml	
+GSE7831	dendritic cells		1C	1	CpG1826 vs (Veh) | 4h	C-b			CpG1826	4h	5 ug/ml	
+GSE9287	spleen		1C	1	TLR7 OE vs (WT) |	A-a	TLR7	OE				
+GSE13032	whole lung		1C	1	ovalbumin vs (Veh) | 3d	A-a			ovalbumin	3d	3x1%	
+GSE13032	whole lung		1C	1	resiquimod;ovalbumin 1d;3d vs ovalbumin 3d |	B-A			resiquimod	1d	100 ug	
+GSE41496	whole spleen		1C	1	TLR9 LOF vs | (Veh) 24h	c-a	TLR9	LOF		24h		
+GSE41496	whole spleen		1C	1	TLR9 LOF P. chabaudi AS (MRA-429) vs (Veh) | 24h	E-a	TLR9	LOF		24h		
+GSE41496	whole spleen		1C	1	TLR9 LOF vs | (Veh) 24h	c-A	TLR9	LOF		24h		
+GSE41496	whole spleen		1C	1	TLR9 LOF P. chabaudi AS (MRA-429) vs (Veh) | 24h	E-A	TLR9	LOF		24h		
+GSE41496	whole spleen		1C	1	TLR7 LOF vs | (Veh) 24h	b-a	TLR7	LOF		24h		
+GSE41496	whole spleen		1C	1	TLR7 LOF P. chabaudi AS (MRA-429) vs (Veh) | 24h	D-a	TLR7	LOF		24h		
+GSE41496	whole spleen		1C	1	TLR7 LOF vs | (Veh) 24h	b-A	TLR7	LOF		24h		
+GSE41496	whole spleen		1C	1	TLR7 LOF P. chabaudi AS (MRA-429) vs (Veh) | 24h	D-A	TLR7	LOF		24h		
+GSE41496	whole spleen		1C	1	Unc93b vs | (Veh) 24h	d-a	Unc93b	LOF		24h		
+GSE41496	whole spleen		1C	1	Unc93b P. chabaudi AS (MRA-429) vs (Veh) | 24h	F-a	Unc93b	LOF		24h		
+GSE41496	whole spleen		1C	1	Unc93b vs | (Veh) 24h	d-A	Unc93b	LOF		24h		
+GSE41496	whole spleen		1C	1	Unc93b P. chabaudi AS (MRA-429) vs (Veh) | 24h	F-A	Unc93b	LOF		24h		
+GSE41496	whole spleen		1C	1	MYD88 LOF vs | (Veh) 24h	B-a	MYD88	LOF		24h		
+GSE41496	whole spleen		1C	1	MYD88 LOF P. chabaudi AS (MRA-429) vs (Veh) | 24h	C-a	MYD88	LOF		24h		
+GSE41496	whole spleen		1C	1	MYD88 LOF vs | (Veh) 24h	B-A	MYD88	LOF		24h		
+GSE41496	whole spleen		1C	1	MYD88 LOF P. chabaudi AS (MRA-429) vs (Veh) | 24h	C-A	MYD88	LOF		24h		
+GSE50400	skin		1C	1	IL23 vs (Veh) | 3d	A-a			IL23	3d	3 ug	
+GSE50400	skin		1C	1	IL23;IMO-8400 vs IL23 | 3d	B-A			IMO-8400	3d	3 ug;3x15 mg/kg	
+GSE50400	skin		1C	1	IL23;IMO-3100 vs IL23 | 3d	C-A			IMO-3100	3d	3 ug;3x15 mg/kg	
+GSE47147	TMD8		2CDirect	1	TLR 7 GOF vs (WT)	A	TLR7	GOF				
+GSE47147	TMD8		2CDirect	1	TLR 9 GOF vs (WT)	B	TLR9	GOF				
+GSE65309	Dermal Monocytes		1C	1	imiquimod 5d vs (Veh) |	A-a			imiquimod	5d	5%	
+GSE65309	Dermal Ly-6Chigh moDCs		1C	1	imiquimod 5d vs (Veh) |	B-a			imiquimod	5d	5%	
+GSE65309	Dermal Ly-6Chigh moDCs		1C	1	imiquimod 11d vs (Veh) |	A-a			imiquimod	11d	5%	
+GSE65309	Dermal MHCIIlow Macrophages		1C	1	imiquimod 5d vs (Veh) |	B-a			imiquimod	5d	5%	May want to analyze both types of macrophages with batch term instead of as separate experiments
+GSE65309	Dermal MHCIIlow Macrophages		1C	1	imiquimod 11d vs (Veh) |	A-a			imiquimod	11d	5%	May want to analyze both types of macrophages with batch term instead of as separate experiments
+GSE65309	Dermal MHCIIhi Macrophages		1C	1	imiquimod 11d vs (Veh) |	A-a			imiquimod	11d	5%	May want to analyze both types of macrophages with batch term instead of as separate experiments
+GSE65309	Dermal CD11b+ conventional DCs		1C	1	imiquimod 5d vs (Veh) |	B-a			imiquimod	5d	5%	
+GSE65309	Dermal CD11b+ conventional DCs		1C	1	imiquimod 11d vs (Veh) |	A-a			imiquimod	11d	5%	
+GSE65309	Epidermal Langerhans Cells		1C	1	imiquimod 5d vs (Veh) |	B-a			imiquimod	5d	5%	
+GSE65309	Epidermal Langerhans Cells		1C	1	imiquimod 11d vs (Veh) |	A-a			imiquimod	11d	5%	
+GSE70520	bone marrow  macrophages		Htseq	1	R848 vs (Veh) | 5d	A-a			R848	5d		
+GSE98480	monocytes		1C	1	R848 vs (Veh) | 6d	C-a			R848	6d	1 ug/ml	
+GSE98480	monocytes		1C	1	LPS vs (Veh) | 6d	A-a			LPS	6d	30 ng/ml	
+GSE98480	monocytes		1C	1	pIC vs (Veh) | 6d	B-a			pIC	6d	50 ug/ml	
+GSE25677	B lymphocytes		1C	1	MPL;R837 vs R837 | 7d	B-C			MPL	7d	5 mg/ml;10-20 mg/ml	
+GSE25677	B lymphocytes		1C	1	MPL;R837 vs MPL | 7d	B-A			R837	7d	5 mg/ml;10-20 mg/ml	

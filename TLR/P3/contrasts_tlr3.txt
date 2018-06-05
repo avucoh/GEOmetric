@@ -1,0 +1,81 @@
+GSE	BioSampName	XP	Contrast	Formula	Node	NodeFunction	BSM	BSMDCD	BSMDCD2	
+GSE2706	dendritic cells	0	LPS vs (Veh) | 2h	A-a			LPS	2h	10 ng/ml	
+GSE2706	dendritic cells	0	LPS;R848 vs R848 | 2h	B-C			LPS	2h	10 ng/ml;2.5 ug/ml	
+GSE2706	dendritic cells	0	LPS;R848 vs R848 | 8h	E-F			LPS	8h	10 ng/ml;2.5 ug/ml	
+GSE2706	dendritic cells	0	R848 vs (Veh) | 2h	C-a			R848	2h	2.5 ug/ml	
+GSE2706	dendritic cells	0	LPS;R848 vs LPS | 2h	B-A			R848	2h	10 ng/ml;2.5 ug/ml	
+GSE2706	dendritic cells	0	LPS;R848 vs LPS | 8h	E-D			R848	8h	10 ng/ml;2.5 ug/ml	
+GSE6802	bronchial epithelial cells	0	P.aeruginosa vs (Veh) | 4h	A-a			P.aeruginosa	4h	10^8/ml	
+GSE6802	bronchial epithelial cells	0	RSV vs (Veh) | 4h	B-a			RSV	4h	10^8/ml	
+GSE9560	odontoblasts	0	LPA vs (Veh) | 8h	A-a			LPA	8h	1 ug/mL	
+GSE9560	odontoblasts	0	pIC vs (Veh) | 8h	C-a			pIC	8h	25 ug/mL	
+GSE9560	odontoblasts	0	LPS vs (Veh) | 8h	B-a			LPS	8h	1 ug/mL	
+GSE9560	dental pulp fibroblasts	0	LPA vs (Veh) | 8h	A-a			LPA	8h	1 ug/mL	
+GSE9560	dental pulp fibroblasts	0	pIC vs (Veh) | 8h	C-a			pIC	8h	25 ug/mL	
+GSE9560	dental pulp fibroblasts	0	LPS vs (Veh) | 8h	B-a			LPS	8h	1 ug/mL	
+GSE11327	dendritic cells	0	LPS;IFN-g vs (Veh) | 6h	D-d			LPS;IFN-g	6h	30 ng/ml;1.000 U/ml	Not enough data (see GSE) to factor out BSM; contrast may not be useful.
+GSE11327	dendritic cells	0	LPS;IFN-g vs (Veh) | 12h	A-a			LPS;IFN-g	12h	30 ng/ml;1.000 U/ml	Not enough data (see GSE) to factor out BSM; contrast may not be useful.
+GSE11327	dendritic cells	0	LPS;IFN-g vs (Veh) | 24h	B-b			LPS;IFN-g	24h	30 ng/ml;1.000 U/ml	Not enough data (see GSE) to factor out BSM; contrast may not be useful.
+GSE11327	dendritic cells	0	LPS;IFN-g vs (Veh) | 48h	C-c			LPS;IFN-g	48h	30 ng/ml;1.000 U/ml	Not enough data (see GSE) to factor out BSM; contrast may not be useful.
+GSE11898	primary mesangial cells	0	pIC vs (Veh) | 6h	B-a			pIC	6h	30 ug	
+GSE11898	primary mesangial cells	0	3P-RNA vs (Veh) | 6h	A-a			3P-RNA	6h	0.5 ug	
+GSE14719	liver	0	TLR3 LOF vs (WT) |	A-a	TLR3	LOF				
+GSE14816	dendritic cells	0	CMV (TB40E) vs (Veh) | 2h	A-a			CMV (TB40E)	2h	MOI=50	
+GSE15066	RAW264.7 macrophages	0	CpG vs (Veh) | 24h	A-a			CpG	24h	1.5 uM	
+GSE15066	RAW264.7 macrophages	0	CpG vs (Veh) | 6h	D-b			CpG	6h	1.5 uM	
+GSE15066	RAW264.7 macrophages	0	LPS vs (Veh) | 24h	B-a			LPS	24h	0.5 ug/mL	
+GSE15066	RAW264.7 macrophages	0	LPS vs (Veh) | 6h	E-b			LPS	6h	0.5 ug/mL	
+GSE15066	RAW264.7 macrophages	0	pIC vs (Veh) | 24h	C-a			pIC	24h	0.25 ug/mL	
+GSE15066	RAW264.7 macrophages	0	pIC vs (Veh) | 6h	F-b			pIC	6h	0.25 ug/mL	
+GSE15416	RAW264.7 macrophages	0	CpG vs (Veh) | 12h	A-a			CpG	12h		
+GSE15416	RAW264.7 macrophages	0	CpG;pIC vs pIC | 12h	B-C			CpG	12h		
+GSE15416	RAW264.7 macrophages	0	CpG vs (Veh) | 4h	D-b			CpG	4h		
+GSE15416	RAW264.7 macrophages	0	CpG;pIC vs pIC | 4h	E-F			CpG	4h		
+GSE15416	RAW264.7 macrophages	0	pIC vs (Veh) | 4h	F-b			pIC	4h		
+GSE15416	RAW264.7 macrophages	0	CpG;pIC vs CpG | 12h	B-A			pIC	12h		
+GSE15416	RAW264.7 macrophages	0	pIC vs (Veh) | 12h	C-a			pIC	12h		
+GSE15416	RAW264.7 macrophages	0	CpG;pIC vs CpG | 4h	E-D			pIC	4h		
+GSE21548	RAW264.7 macrophages	0	LPS vs (Veh) | 24h	A-a			LPS	24h	0.05 ug/mL	
+GSE21548	RAW264.7 macrophages	0	LPS vs (Veh) | 6h	B-b			LPS	6h	0.05 ug/mL	
+GSE24671	spleen	0	TLR3;TLR7;TLR9 LOF vs (WT) |	A-a	TLR3;TLR7;TLR9	LOF				
+GSE24671	spleen	1	MulV vs (Veh) | 24h	A-a			MulV	24h		
+GSE24671	spleen	1	Sendai vs (Veh) | 24h	B-a			Sendai	24h		
+GSE32862	Blood	0	pIC vs (Veh) | 0d	A-a			pIC	0d	1.6 mg	
+GSE32862	Blood	0	pIC vs (Veh) | 7d	I-i			pIC	7d	1.6 mg	
+GSE32862	Blood	0	pIC vs (Veh) | 2d	F-f			pIC	2d	1.6 mg	
+GSE32862	Blood	0	pIC vs (Veh) | 12h	B-b			pIC	12h	1.6 mg	
+GSE32862	Blood	0	pIC vs (Veh) | 1d	D-d			pIC	1d	1.6 mg	
+GSE32862	Blood	0	pIC vs (Veh) | 6h	H-h			pIC	6h	1.6 mg	
+GSE32862	Blood	0	pIC vs (Veh) | 14d	C-c			pIC	14d	1.6 mg	
+GSE32862	Blood	0	pIC vs (Veh) | 28d	E-e			pIC	28d	1.6 mg	
+GSE32862	Blood	0	pIC vs (Veh) | 3d	G-g			pIC	3d	1.6 mg	
+GSE32862	PBMC	0	anti-IFNAR mAb vs (Veh) | 1h	B-a			anti-IFNAR mAb	1h		
+GSE32862	PBMC	0	anti-IFNAR mAb vs (Veh) | 1h	B-a			anti-IFNAR mAb	1h	10 ug/ml	
+GSE32862	PBMC	0	anti-IFNAR mAb;pIC 1h;13h vs pIC 13h |	C-A			anti-IFNAR mAb	1h;13h	10 ug/ml;50 ug/ml	
+GSE32862	PBMC	0	anti-IFNAR mAb;pIC 1h;6h vs pIC 6h |	D-E			anti-IFNAR mAb	1h;6h	10 ug/ml;50 ug/ml	
+GSE32862	PBMC	0	anti-IFNAR mAb;pIC 1h;13h vs anti-IFNAR mAb 1h |	C-B			pIC	1h;13h	10 ug/ml;50 ug/ml	
+GSE32862	PBMC	0	anti-IFNAR mAb;pIC 1h;13h vs anti-IFNAR mAb 1h |	C-B			pIC	1h;13h	10 ug/ml;50 ug/ml	
+GSE36891	peritoneal macrophages	0	pIC vs (Veh) | 24h	B-a			pIC	24h	2 ug/ml	
+GSE36891	peritoneal macrophages	0	PAM vs (Veh) | 24h	A-a			PAM	24h	1 ug/ml	
+GSE40593	astrocytes	0	UNC93B LOF vs (WT) |	A-a	UNC93B	LOF				
+GSE40593	neurons	0	UNC93B LOF vs (WT) |	A-a	UNC93B	LOF				
+GSE43217	HT1080	0	pIC vs (Veh) | 6h	C-a			pIC	6h	100 ug/ml	
+GSE43217	HT1080	0	PKCi;pIC 1h;6h vs PKCi 1h |	B-A			pIC	1h;6h	5 uM;100 ug/ml	
+GSE43217	HT1080	0	PKCi;pIC 1h;6h vs pIC 6h |	B-C			PKCi	1h;6h	5 uM;100 ug/ml	
+GSE57512	dendritic cells	0	pIC vs (Veh) | 2h	A-a			pIC	2h		
+GSE68820	lung tissue	0	TLR3 LOF vs (WT) | (Veh) 2d	A-a	TLR3	LOF		2d		
+GSE68820	lung tissue	0	TLR3 LOF vs (WT) | MA15 virus 2d	C-B	TLR3	LOF		2d	10^5	
+GSE68820	lung tissue	0	TLR3 LOF vs (WT) | (Veh) 4d	D-b	TLR3	LOF		4d		
+GSE68820	lung tissue	0	TLR3 LOF vs (WT) | MA15 virus 4d	F-E	TLR3	LOF		4d	10^5	
+GSE68820	lung tissue	0	TLR3 LOF vs (WT) | (Veh) 7d	G-c	TLR3	LOF		7d		
+GSE68820	lung tissue	0	TLR3 LOF vs (WT) | MA15 virus 7d	I-H	TLR3	LOF		7d	10^5	
+GSE68820	lung tissue	0	MA15 virus vs (Veh) | TLR3 LOF 2d	C-A		LOF	MA15 virus	2d	10^5	
+GSE68820	lung tissue	0	MA15 virus vs (Veh) | TLR3 LOF 4d	F-D		LOF	MA15 virus	4d	10^5	
+GSE68820	lung tissue	0	MA15 virus vs (Veh) | (WT) 2d	B-a			MA15 virus	2d	10^5	
+GSE68820	lung tissue	0	MA15 virus vs (Veh) | (WT) 4d	E-b			MA15 virus	4d	10^5	
+GSE68820	lung tissue	0	MA15 virus vs (Veh) | TLR3 LOF 7d	I-G		LOF	MA15 virus	7d	10^5	
+GSE68820	lung tissue	0	MA15 virus vs (Veh) | (WT) 7d	H-c			MA15 virus	7d	10^5	
+GSE79241	colon tissue	0	DSS vs (Veh) | 8d	A-a			DSS	8d	2.5% (w/v)	
+GSE67241	lung tissue	0	A/Jena/5258/09 virus vs (Veh) | 7d	B-b			A/Jena/5258/09 virus	7d	10^6 TCID50/20 ul	
+GSE67241	lung tissue	0	A/Jena/5258/09 virus vs (Veh) | 12d	A-a			A/Jena/5258/09 virus	12d	10^6 TCID50/20 ul	
+GSE104190	beta cell line	0	pIC vs (Veh) | 48h	A-a			pIC	48h	1 ug/ml	

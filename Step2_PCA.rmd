@@ -1,0 +1,123 @@
+---
+title: "GEOmetric: Sample screener"
+runtime: shiny
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    theme: spacelab
+    css: custom.css
+---
+
+```{r setup, include=T}
+library(flexdashboard)
+library(data.table)
+library(GEOquery)
+library(ggplot2)
+library(plotly)
+
+```
+
+```{r global, include=F}
+
+datadir <- "GEOtemp" ## This is where the GEO data were downloaded to
+reviewed <- "sample_review.txt" 
+file <- fread(annotationfile, colClasses = "character")
+GSE.list <- unique(file$GSE)
+
+```
+
+
+Column  {.sidebar}
+-----------------------------------------------------------------------
+
+```{r}
+
+selectInput("GSE", "GSE", choices = GSE.list)
+# textInput("getGSE", "Get new dataset from GEO")
+actionButton("run", "Run")
+br()
+br()
+# actionButton("log2", "Log2(data)")
+# helpText("")
+
+gse <- reactiveValues(eset = NULL)
+
+observeEvent(input$run, {
+  # if(input$getGSE != "") getGEO(input$getGSE, destdir = datadir)
+  path <- paste0(datadir, "/", input$GSE, "_series_matrix.txt.gz")
+  if(!file.exists(path)) {
+    showNotification("Dataset not found in local cache; downloading now. Please wait.", duration = 10, type = "default")
+    getGEO(GEO = input$GSE, destdir = datadir)
+  }
+  gse$eset <- exprs(getGEO(filename = path, getGPL = F, parseCharacteristics = F))
+  gse$groups <- file[GSE == input$GSE, paste(BioSampName, Node, NodeFunction, BSM, BSMDCD, sep = "-")]
+  gse$gsms <- file[GSE == input$GSE, geo_accession]
+  gse$biosamples <- length(file[GSE == input$GSE, unique(BioSampName)])
+})
+
+observeEvent(input$log2, {
+  eset <- gse$eset
+  eset[which(eset <= 0)] <- NaN
+  gse$eset <- log2(eset)
+})
+
+
+```
+
+Column {.tabset}
+-----------------------------------------------------------------------
+
+### PCA
+
+```{r}
+
+output$PCA <- renderPlotly({
+  validate(need(!is.null(gse$eset), ""))
+  eset <- gse$eset
+  missing <- sum(is.na(eset) == T)
+  if(missing) showNotification(paste("There were", missing, "missing data point(s)."), type = "warning", duration = NULL)
+  eset <- na.omit(eset)
+  pca <- prcomp(t(eset))
+  pca2 <- data.frame(pca$x[, 1:2], Group = factor(gse$groups), GSM = gse$gsms)
+  shapes <- rep_len(15:19, nlevels(factor(gse$groups)))
+  p <- ggplot(data = pca2, aes(x = PC1, y = PC2, shape = Group, color = Group, label = GSM)) + 
+                scale_shape_manual(values = shapes) + geom_point(size = 3)
+  # Attempt to cluster points to see whether "batch effects" was just due to having more than one biosample type.
+  # if(gse$biosamples > 1) {
+  #   k <- kmeans(pca$x, centers = 2)
+  #   pca2$Cluster <- k$cluster
+  #   poly <- lapply(split(pca2, pca2$Cluster), function(df) { df[chull(df), ] })
+  #   poly <- do.call(rbind, poly)
+  #   p <- p + geom_polygon(data = poly, aes(x = PC1, y = PC2, group = Cluster, fill = Cluster), alpha = 0.3, linetype = 0)
+  # } 
+  p <- ggplotly(p, tooltip = c("Group", "GSM"))
+  p
+})
+
+plotlyOutput("PCA")
+```
+
+### Boxplot
+
+```{r}
+
+output$boxplot <- renderPlot({
+  validate(need(!is.null(gse$eset), ""))
+  boxplot(gse$eset, outline = F)
+})
+
+plotOutput("boxplot")
+```
+
+### Metadata
+```{r}
+
+output$mtab <- renderTable({
+  # may output additional info later
+})
+
+tableOutput("mtab")
+
+```
+
