@@ -47,7 +47,9 @@ Statistical checks of dataset.
 ## Step 3
 Create contrasts
 1. Groups are assigned.
-2. Create contrast formulas (for running limma) and title. For example, Group A = macrophages stimulated with LPS for 4 hours. Group B = macrophages untreated (media, or vehicle only) for 4 hours. The contrast formula is "B-A". The title would be "LPS vs (Veh) | 4h". 
+2. Create contrast formulas (for running limma) and title. For an example *with a 1Channel experiment*, Group A = macrophages stimulated with LPS for 4 hours. Group B = macrophages untreated (media, or vehicle only) for 4 hours. The contrast formula is "B-A". The title would be "LPS vs (Veh) | 4h". 
+
+*Contrast construction can vary with 2Channel experiments.* See [Limma User's Guide](https://www.bioconductor.org/packages/devel/bioc/vignettes/limma/inst/doc/usersguide.pdf) Chapter 10: Two-Color Experiments with a Common Reference, Chapter 11: Direct Two-Color Experimental Designs. 
 
 ## Step 4
 Limma -> results. Refer to fitter.R for inputs and how they're used.
