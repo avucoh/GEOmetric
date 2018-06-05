@@ -1,11 +1,9 @@
 # GEOmetric
 
-## Steps
-
-### Step 0
+## Step 0
 Select relevant GSEs based on key-word searching and reading description.
 
-### Step 1
+## Step 1
 Download GSEs of interest and make a structured annotation table describing samples and other experiment data. Significance:
 1. The description of a GSE gives only a conceptual guide to whether it is good for our purposes. This process helps further determine if a GSE is suitable and what kind of contrasts can be generated given the samples and experimental design. 
 2. The annotations make it easier to feed the datasets to the PCA and limma in a standard and reproducible manner. 
@@ -40,19 +38,19 @@ Note: Previous used labels include: OE (Overexpression), LOF (Loss of Function)
 BSMDCD2: Dose, concentrations. In practice, group assignments are not based on BSMDCD2 because experiments usually vary time points and
 not concentrations for a ligand.  
 
-### Step 2 
+## Step 2 
 Statistical checks of dataset.
 1. PCA -- batch effects, mislabeling?
 2. Boxplots of samples -- arrays have been normalized, no RNA degradation? 
 3. Data are on logged data -- almost always yes (since limma expects log data)
 
-### Step 3
+## Step 3
 Create contrasts
 
-### Step 4
+## Step 4
 Limma -> results
 
-### Step 5
+## Step 5
 Map biosample ids and create a dataset summary file with descriptions for each submission.
 
 
