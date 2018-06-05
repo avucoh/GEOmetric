@@ -46,12 +46,17 @@ Statistical checks of dataset.
 
 ## Step 3
 Create contrasts
+1. Groups are assigned.
+2. Create contrast formulas (for running limma) and title. For example, Group A = macrophages stimulated with LPS for 4 hours. Group B = macrophages untreated (media, or vehicle only) for 4 hours. The contrast formula is "B-A". The title would be "LPS vs (Veh) | 4h". 
 
 ## Step 4
-Limma -> results
+Limma -> results. Refer to fitter.R for inputs and how they're used.
 
 ## Step 5
-Map biosample ids and create a dataset summary file with descriptions for each submission.
+Use bioconductor annotation packages or GPL to get gene names for results. Refer to annotationHelper.R
+
+## Step 6
+Map biosample ids (this is, for now, done manually) and create a dataset summary file with descriptions for each submission.
 
 
 
