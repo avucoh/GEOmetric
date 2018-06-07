@@ -1,0 +1,46 @@
+#download investigator normalized values from a GSE
+> library(limma)
+> library(GEOquery)
+> eset<-getGEO("GSE10082")[[1]]
+
+#set up targets
+> targets<-pData(eset)
+> colnames(targets)
+> targets<-targets[,c(1,2,10)]
+> targets
+> targets$treat<-c(rep("ko.cont",2),"wt.cont",rep("wt.tcdd",2),"ko.cont",rep("ko.tcdd",2),rep("wt.cont",2),rep("wt.tcdd",2),"wt.cont",rep("wt.tcdd",2),"ko.tcdd"","wt.cont")
+> targets
+> targets$rep<-c(1,2,1,1,2,3,1,2,2,3,3,4,4,5,6,3,5)
+> targets
+
+
+#look at PCA plot of the full expression data matrix. I use plotPCA function from the affycoretools library because it has a nice wrapper for the prcomp function.
+> library(affycoretools)
+> plotPCA(eset,groups=factor(targets$treat),groupnames=levels(factor(targets$treat)),addtext=targets$rep)
+
+
+#set up group means design matrix for limma
+> design<-model.matrix(~0+factor(targets$treat))
+> colnames(design)<-levels(factor(targets$treat))
+> head(design)
+
+
+#set up contrasts of interest
+> cont.matrix<-makeContrasts("AhrKOvsWT"=ko.cont-wt.cont,"AhrKOvsWT.TCDD"=ko.tcdd-wt.tcdd,"TCDDvsVeh"=wt.tcdd-wt.cont,"TCDDvsVeh.AhrKO"=ko.tcdd-ko.cont,levels=design)
+> cont.matrix
+
+
+#fit model
+> fit<-lmFit(eset,design)
+> fit2<-contrasts.fit(fit,cont.matrix)
+> fit3<-eBayes(fit2)
+
+#use updated BioC annotation
+> library(mouse4302.db)
+> sym<-unlist2(mget(rownames(fit3),mouse4302SYMBOL))
+> head(sym)
+> fit3$genes<-list(arrayid=rownames(fit3),symbol=sym)
+> topTable(fit3)
+
+#output linear modeling result to a .txt file
+> write.fit(fit3, results=NULL, file="fit3.txt", digits=10, adjust="fdr", method="separate",F.adjust="none", sep="\t")

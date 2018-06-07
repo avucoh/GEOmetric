@@ -21,8 +21,8 @@ library(plotly)
 ```{r global, include=F}
 
 datadir <- "GEOtemp" ## This is where the GEO data were downloaded to
-reviewed <- "sample_review.txt" 
-file <- fread(annotationfile, colClasses = "character")
+reviewed <- "axel_sample_review.txt" 
+file <- fread(reviewed, colClasses = "character")
 GSE.list <- unique(file$GSE)
 
 ```

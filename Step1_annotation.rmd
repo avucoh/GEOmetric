@@ -38,7 +38,7 @@ Sometimes downloading a GEO will fail (maybe 1-5% of GSEs?) because there was a 
 
 ok <- allOK(results)
 table(ok)
-results <- results[ok == T] # Check any failures later, proceed with 
+results <- results[ok] # Check any failures later, proceed with OK
 
 ```
 

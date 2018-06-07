@@ -3,6 +3,8 @@ library(GEOquery)
 library(limma)
 library(magrittr)
 
+datadir <- "GEOtemp/"
+resultsdir <- "Results/"
 DT <- fread("reviewed_tlr7.txt")
 DT <- DT[GSE != "", 1:17]
 setkey(DT, GSE)
@@ -15,19 +17,18 @@ fitDesign <- function(contrast) {
   dt <- DT[gse]
   bio <- contrast$BioSampName[1]
   xpType <- contrast$xpType[1]
-  path <- paste0("GEOtemp/", gse, "_series_matrix.txt.gz")
+  path <- paste0(datadir, gse, "_series_matrix.txt.gz")
   if(!file.exists(path)) getGEO(gse, parseCharacteristics = F)
   gse <- getGEO(filename = path, parseCharacteristics = F)
-  select <- (dt$BioSampName == bio) & (dt$Ignore == 0)
+  # make sure to select samples of same biosample type because gses will include multiple cell types
+  select <- (dt$BioSampName == bio) & (dt$Ignore == 0) 
   eset <- exprs(gse)
   eset <- eset[, select]
   dt <- dt[select]
   batch <- factor(dt$Batch) 
   group <- factor(dt$Group)
-  dt
   if(grepl("1C", xpType)) {
-    # Account for batch/block design
-    if(nlevels(batch) > 1) {
+    if(nlevels(batch) > 1) { # Account for batch/block design by including term in formula
       design <- model.matrix(~0 + group + batch)
       colnames(design) <- gsub("group|batch", "", colnames(design))
     } else {
@@ -51,7 +52,7 @@ fitDesign <- function(contrast) {
   return(fit)
 }
 
-fitContrast <- function(fit, contrast) {
+fitContrast <- function(fit, contrasts) {
   cont.matrix <- makeContrasts(contrasts = contrasts$Formula, levels = fit$design)
   colnames(cont.matrix) <- contrasts$Contrast
   rownames(cont.matrix) <- colnames(design)
@@ -77,6 +78,6 @@ error <- which(sapply(results, class) == "try-error")
 # results <- results[-error] 
 
 for(gse in names(results)) {
-write.fit(results[[gse]], results = NULL, file = paste0("Results/", gse, "_fit.txt"), digits = 10, 
+write.fit(results[[gse]], results = NULL, file = paste0(resultsdir, gse, "_fit.txt"), digits = 10, 
           adjust = "fdr", method = "separate", F.adjust = "none", sep="\t")
 }

@@ -1,0 +1,129 @@
+---
+title: "Fitter"
+author: "ANV"
+date: "June 5, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(data.table)
+library(GEOquery)
+library(limma)
+library(magrittr)
+
+source("Code/misc.R")
+```
+
+## Input/Outputs
+First, specify input and output files/paths.
+```{r}
+
+datadir <- "GEOtemp"
+resultsdir <- "Results/"
+
+
+reviewed.txt <- "axel_sample_review.txt" # This file was the result of Step 1
+contrasts.txt <- "axel_contrasts4.txt"  
+
+```
+
+Read in files.
+```{r}
+DT <- fread(reviewed.txt)
+DT <- DT[GSE != ""]
+setkey(DT, GSE)
+
+contrasts <- fread(contrasts.txt)
+contrasts <- split(contrasts, by = c("GSE", "BioSampName"))
+```
+
+## Fit 1 (Design)
+Make the design matrix that encodes data about groups and experiment and do Fit #1.
+```{r, warning=FALSE, message=FALSE }
+
+fitDesign <- function(contrast) {
+  fit <- NULL
+  # Use information from contrast file
+  gse <- contrast$GSE[1]
+  dt <- DT[gse]
+  bio <- contrast$BioSampName[1]
+  xpType <- contrast$xpType[1]
+  
+  # Get GEO matrix data
+  path <- paste0(datadir, "/", gse, "_series_matrix.txt.gz")
+  if(!file.exists(path)) getGEO(gse, parseCharacteristics = F, destdir = datadir) # data may not be already downloaded if on a different machine
+  gse <- suppressMessages(getGEO(filename = path, parseCharacteristics = F))
+  eset <- exprs(gse)
+  
+  # To do: there may be a time when we need to do duplicateCorrelation() for technical-replicates only
+  
+  # Apply contrasts and do fit
+  select <- (dt$BioSampName == bio) & (dt$Ignore == 0)
+  eset <- eset[, select]
+  dt <- dt[select]
+  batch <- factor(dt$Batch)
+  group <- factor(dt$Group)
+  if(grepl("1C", xpType)) {
+    if(nlevels(batch) > 1) { # Account for batch/block design by including term in formula
+      design <- model.matrix(~0 + group + batch)
+      colnames(design) <- gsub("group|batch", "", colnames(design))
+    } else {
+      design <- model.matrix(~0 + group)
+      colnames(design) <- levels(group)
+    }
+    fit <- lmFit(eset, design)
+  } else if(grepl("2CDirect|2CCommonRef", xpType)) {
+    targets <- dt[, .(geo_accession, RefDye, Group)]
+    targets[, Cy3 := ifelse(RefDye == "Cy3", "Ref", Group)]
+    targets[, Cy5 := ifelse(RefDye == "Cy5", "Ref", Group)]
+    targets <- targets[, .(geo_accession, Cy3, Cy5)]
+    design <- modelMatrix(targets, ref = "Ref")
+    fit <- lmFit(eset, design)
+  } else if(grepl("Htseq", xpType)) {
+    ## TO DO: call voom -- need to review how to process HT data first
+
+  } else {
+
+  }
+  return(fit)
+}
+
+fit1 <- lapply(contrasts, function(x) try(fitDesign(x)))
+ok <- allOK(fit1)
+table(ok)
+fit1 <- fit1[ok]
+contrasts <- contrasts[ok]
+
+```
+
+## Fit 2 (Contrasts)
+```{r, warning=FALSE, message=FALSE }
+
+fitContrasts <- function(fit, contrasts) {
+  cont.matrix <- makeContrasts(contrasts = contrasts$Formula, levels = fit$design)
+  colnames(cont.matrix) <- contrasts$Contrast
+  rownames(cont.matrix) <- colnames(design)
+  fit2 <- contrasts.fit(fit, cont.matrix) %>% eBayes()
+  return(fit2)
+}
+
+tryFit2 <- function(fit, contrasts) try(fitContrasts(fit, contrasts))  
+
+fit2 <- mapply(tryFit2, fit1, contrasts)
+names(fit2) <- names(contrasts)
+fit2 <- fit2[!sapply(fit2, is.null)] # The Htseq and other xp types that will be handled later
+ok2 <- allOK(fit2)
+table(ok2)
+fit2 <- fit2[ok]
+  
+```
+
+## Export results
+```{r }
+
+for(f in names(fit2)) {
+write.fit(fit2[[f]], results = NULL, file = paste0(resultsdir, f, "_fit.txt"), digits = 10, 
+          adjust = "fdr", method = "separate", F.adjust = "none", sep="\t")
+}
+```
