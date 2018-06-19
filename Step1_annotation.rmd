@@ -10,17 +10,25 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(data.table)
 library(GEOquery)
+library(stringdist)
 source("Code/misc.R")
 
+```
+
+```{r}
 # Specify a directory where GSE downloaded files are stored
 GEOtemp <- "GEOtemp"
 
+# Input file
+GSELIST <- "test2.txt"
+# Location/name for output file
+REVIEW1 <- "sample_review.txt"
 ```
 
 ## Download GSEs
 Feed in the ids of GSEs that passed Filter #1 (based on description). The following steps pull the metadata create a standardized annotation table for the samples.
 ```{r}
-gses <- readLines("test.txt")
+gses <- readLines(GSELIST)
 
 # Download the GSE
 getSamples <- function(gse) {
@@ -28,17 +36,19 @@ getSamples <- function(gse) {
   pData(eset)
 }
 
-results <- lapply(gses, function(x) try(getSamples(x)))
+# if processing many, limit messages to avoid cluttering display
+results <- suppressMessages(lapply(gses, function(x) try(getSamples(x)))) 
 names(results) <- gses
 
 ```
 
-Sometimes downloading a GEO will fail (maybe 1-5% of GSEs?) because there was a parsing error or some other problem, so check list:
+Sometimes downloading a GEO will fail (maybe 1-5% of GSEs?) because there was a parsing error or some other problem. GEOquery verbose output but not always helpful, so better to check with:
 ```{r}
 
 ok <- allOK(results)
 table(ok)
-results <- results[ok] # Check any failures later, proceed with OK
+cat("GSEs that failed:", names(results)[!ok])
+results <- results[ok] # Go back to failures later, proceed with OK
 
 ```
 
@@ -49,9 +59,9 @@ This is only the starting point as data is imperfectly extracted; manual annotat
 
 # Experiment Type (1-Channel or 2-Channel; more specific assignments, i.e. whether there was dye swap, happens in human review)
 inferXPType <- function(DT) {
-  default <- "1C"
+  default <- rep("1C", nrow(DT))
   ch2 <- grep("source_name_ch2", names(DT))
-  if(length(ch2)) return("2C")
+  if(length(ch2)) return(rep("2C", nrow(DT)))
   return(default)
 }
 
@@ -60,9 +70,9 @@ ixpType <- sapply(results, inferXPType)
 # BSM -- Molecule -- note: perhaps have a list of all known tlr ligands to match against
 inferBSM <- function(DT) {
   x1 <- rep("", nrow(DT))
-  bsmcol <- grep("agent|stimulation", names(DT)) # This won't work if columns weren't parsed
-  if(sum(bsmcol)) {
-    info <- do.call(paste, DT[, bsmcol])
+  bsmcol <- grep("agent|stimulation", names(DT))
+  if(length(bsmcol) == 1) {
+    info <- DT[bsmcol]
     return(info)
   } 
   return(x1)
@@ -74,9 +84,9 @@ iBSM <- sapply(results, inferBSM)
 inferDCD <- function(DT) {
   x1 <- rep("", nrow(DT))
   # First find a column that specifically contains treatment info
-  tcol <- grep("^treatment|time", names(DT))
-  if(sum(tcol)) {
-    info <- do.call(paste, DT[, tcol])
+  tcol <- grep("^treatment:ch1|time", names(DT))
+  if(length(tcol)) {
+    info <- do.call(paste, DT[tcol])
   } else { # Use information in sample title
     info <- DT$title
   }
@@ -94,10 +104,13 @@ iDCD <- sapply(results, inferDCD)
 inferDCD2 <- function(DT) {
   x1 <- rep("", nrow(DT))
   dosecol <- grep("dose|concentration|amount|treatment", names(DT))
-  if(sum(dosecol)) {
-    info <- do.call(paste, DT[, dosecol])
-    m <- regexpr("[0-9.]+ ?(u|n|m)(g|M)?\\/?([A-Za-z]{2})", info)
-    x1[m != -1] <- regmatches(info, m)
+  dosecol <- c(dosecol, which(sapply(DT, function(x) grepl("treatment_protocol", x[1])) == T))
+  if(length(dosecol)) {
+    info <- do.call(paste, DT[dosecol])
+    m <- gregexpr("[0-9.]+ ?(u|n|m|[?])(g|M)?(\\/[A-Za-z]{2})?", info)
+    dose <- sapply(regmatches(info, m), paste, collapse = ";")
+    dose <- gsub("?", "u", dose, fixed = T)
+    x1 <- dose
   }
   return(x1)
 }
@@ -108,20 +121,27 @@ iDCD2 <- sapply(results, inferDCD2)
 biosamps <- readLines("biosamps.txt") ## This is a list derived from "allbiosamples"
 
 inferBiosamp <- function(DT) {
-  # First find the obvious columns, looking for one containing cell line/type first
+  # First find the obvious columns containing cell line/type
   cellcol <- grep("^cell.*ch1", colnames(DT))
-  if(sum(cellcol)) {
-    cell <- do.call(paste, DT[, cellcol])
+  if(length(cellcol)) {
+    cell <- do.call(paste, DT[cellcol])
     return(cell)
   } else {
     tissuecol <- grep("^tissue.*ch1", colnames(DT))
-    if(sum(tissuecol)) {
-      tissue <- do.call(paste, DT[, tissuecol])
+    if(length(tissuecol)) {
+      tissue <- do.call(paste, DT[tissuecol])
       return(tissue)
-    } else { # Use the source_name_ch1 column
-      biosample <- sapply(DT$source_name_ch1, function(x) biosamps[amatch(x, biosamps)])
-      biosample[is.na(biosample)] <- "?"
-      return(biosample)
+    } else { # Use the source_name_ch1,treatment_protocol_ch1 columns otherwise
+      bs <- lapply(biosamps, function(b) grepl(b, paste(DT$source_name_ch1, DT$treatment_protocol_ch1)))
+      names(bs) <- biosamps
+      bs <- bs[sapply(bs, sum) >= 1 ]
+      if(!length(bs)) return(rep("?", nrow(DT))) 
+      bs <- bs[order(sapply(bs, sum), decreasing = T)]
+      nterm <- ifelse(length(bs) > 1, 2, 1)
+      x1 <- lapply(1:nterm, function(i) ifelse(bs[[i]], names(bs)[[i]], ""))
+      x1 <- do.call("paste", x1)
+      x1 <- trimws(x1)
+      return(x1)
     }
   }
 }
@@ -139,47 +159,32 @@ iCTRL <- sapply(results, inferCTRL)
 ```
 
 
-Subset table for export with selected columns.
+Subset table for export with selected columns. Join data in one table and fill in additional columns.
 ```{r}
 
-subP <- function(data) {
-  cols <- grep("title|geo_accession|source_name|description|platform|characteristics|treatment", names(data))
-  data <- data[, cols]
-  data <- lapply(data, function(x) gsub("\n", " ", x))
-  as.data.table(data)
-} 
-
-export <- lapply(results, subP)
-
-```
-
-
-Join data in one table and fill in additional columns.
-```{r}
-
-# Name for output file
-reviewtable <- "sample_review.txt"
-
-export <- rbindlist(export, fill = T)
-export[, GSE := unlist(mapply(rep, gses, sapply(results, nrow)))]
-newcols1 <- c("xpType", "RefDye", "Comment", "Group", "Batch", "Node", "NodeFunction", "BSM", "BSMDCD", "BSMDCD2", "BioSampName") 
+export <- rbindlist(results, use.names = T, fill = T)
+keepcols <- grep("title|geo_accession|source_name|description|platform|characteristics|treatment", names(export))
+export <- export[, keepcols, with = F]
+export[, GSE := unlist(mapply(rep, names(results), sapply(results, nrow)))]
+newcols1 <- c("RefDye", "Comment", "Group", "Batch", "Node", "NodeFunction", "BSM") 
 export[, (newcols1) := ""]
 export[, c("Ignore") := 0]
 export[, c("XP") := 1]
 
-export[, xpType := ixpType]
-export[, isCTRL := iCTRL]
-export[, BioSampName := iBiosamp]
-export[, BSMDCD := iDCD]
-export[, BSMDCD2 := iDCD2]
+# Inferred variables
+export[, xpType := unlist(ixpType)]
+export[, isCTRL := unlist(iCTRL)]
+export[, BioSampName := unlist(iBiosamp)]
+export[, BSMDCD := unlist(iDCD)]
+export[, BSMDCD2 := unlist(iDCD2)]
 
-neworder <- c("GSE", newcols1[1:4], "Ignore", "XP", "isCTRL", newcols1[5:11], 
-              "title", "geo_accession", grep("^source|treatment", names(export), val = T),
-              grep("^char", names(export), val = T), "platform_id", grep("^desc", names(export), val = T))
+myorder <- c("GSE", "xpType", "RefDye", "Comment", "Group", "Ignore", "XP", "isCTRL", "Batch", "Node", "NodeFunction", "BSM", "BSMDCD", "BSMDCD2", "BioSampName",
+              "title", "geo_accession")
+neworder <- c(myorder, names(export)[!names(export) %in% myorder])
 setcolorder(export, neworder)
 
 head(export)
-write.table(export, reviewtable, sep = "\t", row.names = F, quote = F)
+write.table(export, REVIEW1, sep = "\t", row.names = F, quote = F)
 
 ```
 

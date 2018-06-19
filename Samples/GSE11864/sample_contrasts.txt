@@ -1,0 +1,4 @@
+Contrast	Formula	Node	NodeFunction	BSM	BSMDCD	BSMDCD2	GSE	BioSampName	xpType	XP
+MCSF;IFNg;Pam3Cys vs MCSF;Pam3Cys | 30h	C-D			IFNg	30h	10 ng/mL	GSE11864	monocytes CD14+	1C	1
+MCSF;IFNg;Pam3Cys vs MCSF;IFNg | 30h	C-B			Pam3Cys	30h	10 ng/mL	GSE11864	monocytes CD14+	1C	1
+M-CSF 30h vs (Veh) |	A-a			M-CSF	30h	10 ng/mL	GSE11864	monocytes CD14+	1C	1

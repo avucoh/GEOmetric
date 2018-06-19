@@ -1,38 +1,42 @@
-### Assign a group (factor)
+library(data.table)
 
-file <- "tlr7_reviewed2.txt"
+# Assign a group (factor)
+makeGroupLabels <- function(x) {
+  modified <- fread(x, colClasses = c("RefDye" = "character", "Comment" = "character", "Group" = "character", "Batch" = "character", 
+                                      "Node" = "character", "NodeFunction" = "character"))
+  modified[Ignore == 1, Group := ""]
+  modified[Ignore == 0 & isCTRL == 0, Group := LETTERS[factor(paste(BSMDCD, BSM, Node, NodeFunction))], by = .(GSE, BioSampName, XP)]
+  modified[Ignore == 0 & isCTRL == 1, Group := letters[factor(paste(BSMDCD, BSM, Node, NodeFunction))], by = .(GSE, BioSampName, XP)]
+  modified
+}
 
-tlr <- fread(file)
-tlr[Ignore == 1, Group := ""]
-tlr[Ignore == 0 & isCTRL == 0, Group := LETTERS[factor(paste(BSMDCD, BSM, Node, NodeFunction))], by = .(GSE, BioSampName, XP)]
-tlr[Ignore == 0 & isCTRL == 1, Group := letters[factor(paste(BSMDCD, BSM, Node, NodeFunction))], by = .(GSE, BioSampName, XP)]
+makeGroupKey <- function(dt) {
+  dt <- dt[Ignore != 1]
+  key <- unique(dt[, .(GSE, Group, xpType, XP, Node, NodeFunction, BSM, BSMDCD, BSMDCD2, BioSampName)])
+  key
+}
 
-write.table(tlr, "tlr7_reviewed2.txt", sep = "\t", row.names = F, quote = F)
-
-tlr <- tlr[Ignore != 1]
-
-key <- unique(tlr[, .(GSE, Group, xpType, XP, Node, NodeFunction, BSM, BSMDCD, BSMDCD2, BioSampName)])
-write.table(key, "tlr7_key.txt", sep = "\t", row.names = F, quote = F, na = "")
-
+# Formatted pasting of contrast names
 fpaste <- function(A, a) {
-  A <- A[names(A) != "BSMDCD2"]
+  A <- A[names(A) != "BSMDCD2"] # ignore concentration info
   a <- a[names(a) != "BSMDCD2"]
   constant <- which(A == a)
   var <- which(A != a)
+  # Possible to do: parse BSM/Node to better note constants
   s <- paste(paste(A[var], collapse = " "), "vs", paste(a[var], collapse = " "), "|", paste(A[constant], collapse = " "))  
   s <- gsub("\\s+", " ", trimws(s))
 }
 
-possibleContrasts <- function(dt) {
+inferContrasts <- function(dt) {
   if(nrow(dt) == 1) {
-    return(c(Contrast = "", Formula = "", dt[, .(Node, NodeFunction, BSM, BSMDCD, BSMDCD2)]))
+    contrast <- c(Contrast = "", Formula = "", dt[, .(Node, NodeFunction, BSM, BSMDCD, BSMDCD2)])
   } else if(nrow(dt) == 2) {
     group <- sort(dt$Group, decreasing = T)
     formula <- paste(group, collapse = "-")
     A <- dt[Group == group[1], .(Node, NodeFunction, BSM, BSMDCD, BSMDCD2)]
     a <- dt[Group == group[2], .(Node, NodeFunction, BSM, BSMDCD, BSMDCD2)]
     contrast <- fpaste(unlist(A), unlist(a))
-    return(c(Contrast = contrast, Formula = formula, as.list(A)))
+    contrast <- c(Contrast = contrast, Formula = formula, as.list(A))
   } else {
     Node <- unique(unlist(strsplit(dt$Node, ";")))
     Node <- Node[Node != "(WT)"]
@@ -67,16 +71,23 @@ possibleContrasts <- function(dt) {
     a <- dt[valid[2, ], .(Node, NodeFunction, BSM, BSMDCD, BSMDCD2)]
     formula <- mapply(function(g1, g2) paste(dt[g1, "Group"], dt[g2, "Group"], sep = "-"), valid[1, ], valid[2, ])
     contrast <- mapply(function(g1, g2) fpaste(unlist(g1), unlist(g2)), split(A, 1:nrow(A)), split(a, 1:nrow(a)))
-    return(list(Contrast = contrast, Formula = formula, Node = effectNode, 
-                NodeFunction = A$NodeFunction, BSM = effectBSM, BSMDCD = A$BSMDCD, BSMDCD2 = A$BSMDCD2))
+    contrast <- list(Contrast = contrast, Formula = formula, Node = effectNode, 
+                NodeFunction = A$NodeFunction, BSM = effectBSM, BSMDCD = A$BSMDCD, BSMDCD2 = A$BSMDCD2)
   }
+    len <- length(contrast$Contrast)
+    metadata <- lapply(c(dt$GSE[1], dt$BioSampName[1], dt$xpType[1], dt$XP[1]), function(x) rep(x, each = len))
+    names(metadata) <- c("GSE", "BioSampName", "xpType", "XP")
+    contrast <- c(contrast, metadata)
+    return(contrast)
 }
 
-contrasts <- key[, possibleContrasts(.SD), by = .(GSE, BioSampName, xpType, XP)]
-write.table(contrasts, "contrasts_2.txt", sep = "\t", row.names = F, quote = F)
-# manual: 5, 15*, 19, 22
-
-# List method
-dtlist <- split(key, by = c("GSE", "BioSampName", "xpType", "XP"))
-results <- lapply(dtlist, function(x) try(possibleContrasts(x)))
-bug <- which(sapply(results, class) == "try-error")
+# Wrapper
+makeContrasts <- function(dt) {
+  key <- makeGroupKey(dt)
+  dtlist <- split(key, by = c("GSE", "BioSampName", "xpType", "XP"))
+  results <- lapply(dtlist, function(x) try(inferContrasts(x)))
+  ok <- allOK(results)
+  results <- results[ok]
+  results <- rbindlist(results)
+  results
+}

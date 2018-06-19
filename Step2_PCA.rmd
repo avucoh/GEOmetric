@@ -1,12 +1,12 @@
 ---
 title: "GEOmetric: Sample screener"
-runtime: shiny
 output: 
   flexdashboard::flex_dashboard:
-    orientation: columns
-    vertical_layout: fill
-    theme: spacelab
-    css: custom.css
+  orientation: columns
+  vertical_layout: fill
+  theme: spacelab
+  css: custom.css
+runtime: shiny
 ---
 
 ```{r setup, include=T}
@@ -15,14 +15,13 @@ library(data.table)
 library(GEOquery)
 library(ggplot2)
 library(plotly)
-
 ```
 
 ```{r global, include=F}
 
 datadir <- "GEOtemp" ## This is where the GEO data were downloaded to
-reviewed <- "axel_sample_review.txt" 
-file <- fread(reviewed, colClasses = "character")
+REVIEWED <- "sample_review.txt" 
+file <- fread(REVIEWED, colClasses = "character")
 GSE.list <- unique(file$GSE)
 
 ```

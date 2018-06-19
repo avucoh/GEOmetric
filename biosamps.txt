@@ -20,7 +20,6 @@ cardiac muscle
 endocardium
 fibroblasts
 myocytes
-other
 sinoatrial node
 ventricle
 whole heart
@@ -66,7 +65,6 @@ metanephros
 pelvis
 podocytes
 whole kidney
-whole
 hepatocytes
 stellate cells
 whole liver
@@ -104,7 +102,6 @@ midbrain
 neural progenitor cells
 NPCs
 NSCs
-Other
 pituitary
 striatum
 dorsal root ganglion
@@ -115,16 +112,9 @@ Schwann cells
 sciatic nerve
 superior cervical ganglion
 trigeminal ganglia
-ear
-eye
-nose
-all biosamples
 epiblast
-face
 flank
-go
 gonadal somatic cells
-head
 intestine
 lateral plate
 morula
@@ -134,7 +124,7 @@ pre-somitic mesoderm
 whole embryo
 XENs
 yolk sac
-1° cells
+primary cells
 3T3-F442A cells
 3T3-L1 cells
 3T3-Swiss cells
@@ -167,7 +157,6 @@ CD34+
 CD36+
 HPC-7 cells
 fetal
-1°
 CD133+
 AMKL
 MEG-01 cells
@@ -250,7 +239,7 @@ UC-MSCs
 184ZNGS1 cells
 184ZNMY2-3 cells
 184ZNMY3-N cells
-1° HMEC cells
+HMEC cells
 240LMY1 cells
 240Lp16s  cells
 240Lp16sMY1 cells
@@ -401,7 +390,8 @@ leukemic stem cells
 lymphoblasts
 lymphocytes
 lymphoma
-natural killer cells (CD56+)
+natural killer cells 
+CD56+
 PBMCs
 T lymphoblasts
 T lymphocytes
@@ -519,7 +509,7 @@ THJ-45N cells
 MTC
 goiter
 Grave's disease
-1° neurons
+neurons
 astrocytes
 Daoy cells
 granule neurons
@@ -551,7 +541,6 @@ neural crest
 neuroblastoma cells
 neuroblastoma
 neuroglia
-neurons
 spinal cord
 telencephalon
 thalamus
@@ -671,8 +660,7 @@ MC3T3-E1 cells
 SaOS2 cells
 trabecular
 U2OS cells
-U2OS-ER± cells
-U2OS-ER² cells
+U2OS-ER cells
 U2OS-GR cells
 calvarium
 sacrum
@@ -940,7 +928,7 @@ Jurkat
 Jurkat E6-1
 memory
 natural killer
-naïve
+naive
 NCHA cells
 P5424 cells
 pre-T
@@ -959,7 +947,7 @@ peritoneal cavity-derived
 RAW264.7 cells
 spleen
 tumor-associated
-CD14++/CD16-
+CD14+/CD16-
 CD14+
 granulocyte progenitor
 U-937 cells
@@ -1160,7 +1148,6 @@ plasmacytoma
 38B9 cells
 81.3 cells
 HAFTL cells
-1° ALL cells
 8946 cells
 CCRF-CEM-C7H2 cells
 CUTLL1 cells

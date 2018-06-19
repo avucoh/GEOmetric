@@ -1,0 +1,49 @@
+---
+title: "Make Contrasts"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(data.table)
+source("Code/misc.R")
+source("Code/fitter.R")
+
+datadir <- "GEOtemp/"
+resultsdir <- "Results/"
+
+REVIEW3 <- "sample_review3.txt"
+CONTRASTS <- "sample_contrasts.txt"
+
+```
+
+## Fit Design (Fit 1)
+```{r }
+
+DT <- fread(REVIEW3, colClasses = c("RefDye" = "character", "Comment" = "character", "Group" = "character", "Batch" = "character", 
+                                      "Node" = "character", "NodeFunction" = "character"))
+DT <- DT[GSE != "", 1:17]
+setkey(DT, GSE)
+contrasts <- fread(CONTRASTS) 
+contrasts <- split(contrasts, by = c("GSE", "BioSampName"))
+
+fit1 <- lapply(contrasts, try2getFit1)
+
+```
+
+## Fit Contrasts (Fit 2)
+```{r }
+
+fit2 <- lapply(fit1, function(x) try2getFit2(x$Fit, x$Contrast))
+ok <- sapply(fit2, allOK)
+results <- fit2[ok]
+results <- results[!sapply(results, is.null)]
+```
+
+Save results:
+```{r }
+for(gse in names(results)) {
+write.fit(results[[gse]], results = NULL, file = paste0(resultsdir, gse, "_fit.txt"), digits = 10, 
+          adjust = "fdr", method = "separate", F.adjust = "none", sep="\t")
+}
+```
