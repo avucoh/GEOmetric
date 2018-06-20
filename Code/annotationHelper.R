@@ -67,13 +67,15 @@ getBioCPackages <- function(packages) {
   }
 }
   
-geneAnnotate <- function(fit, package, gpl) {
-    data <- read.table(paste0(results, fit, "_fit.txt"), sep = "\t", header = T, check.names = F)
+geneAnnotate <- function(gse, package, gpl) {
+    file <- grep(gse, list.files("../Results/"), value = T)
+    file <-paste0("../Results/", file)
+    data <- read.table(file, sep = "\t", header = T, check.names = F)
     probes <- row.names(data)
     if(!is.na(package)) {
-      data <- geneAnnotateBioC(probes, package)
+      data$genes <- geneAnnotateBioC(probes, package)
     } else {
-      data <- geneAnnotateGPL(fit, gpl)
+      data$genes <- geneAnnotateGPL(fit, gpl)
     }
     return(data)
 }
@@ -81,9 +83,8 @@ geneAnnotate <- function(fit, package, gpl) {
 geneAnnotateBioC <- function(probes, package) {
   genes <- select(get(package), keys = probes, columns = "SYMBOL", keytype = "PROBEID")
   genes <- split(genes$SYMBOL, factor(genes$PROBEID))
-  symbol <- sapply(genes, function(x) x[1])
-  data$genes <- symbol
-  return(data)
+  genes <- sapply(genes, function(x) x[1])
+  return(genes)
 }
 
 # Annotation with GPL requires more supervision
@@ -94,6 +95,5 @@ geneAnnotateGPL <- function(probes, gpl) {
   if(!length(geneCol)) geneCol <- grep("^GENE$", ignore.case = T, cols, val = T)
   gpl <- Table(gpl)[, c("ID", geneCol)]
   genes <- gpl[[geneCol]][match(probes, gpl$ID)]
-  data$genes <- genes
-  return(data)
+  return(genes)
 }

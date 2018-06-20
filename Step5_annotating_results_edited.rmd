@@ -1,0 +1,52 @@
+---
+title: "Annotating Results"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+library(GEOmetadb)
+#if(!file.exists('GEOmetadb.sqlite')) getSQLiteFile()
+
+library(data.table)
+library(hgu133plus2.db)
+
+source("Code/annotationHelper.R")
+source("Code/misc.R")
+```
+
+```{r }
+resultsdir <- "Results"
+GSELIST <- unique(gsub("[.].*", "", list.files(resultsdir)))
+CONTRASTS <- fread("sample_contrasts.txt", colClasses = c("Node" = "character", "NodeFunction" = "character", 
+                                                          "BSM" = "character", "BSMDCD" = "character", "BSMDCD2" = "character"))
+path2GEOmetadb <- "/home/axel/projects/nursa/GEOmetric/GEOmetadb.sqlite"
+#path2GEOmetadb <- "~/Resources/GEOmetadb.sqlite"
+con <- dbConnect(SQLite(), path2GEOmetadb)
+```
+
+## Get dataset info with GEOmetadb
+```{r }
+DSinfo <- datasetsAnnotation(con, GSELIST)
+DSinfo$DatasetName <- mapply(writeDatasetName, split(CONTRASTS, by = "GSE"), split(DSinfo, by = "GSE")) # See parameter "controlterms" for better results
+DSinfo$DatasetDesc <- mapply(writeDatasetDesc, split(CONTRASTS, by = "GSE"), split(DSinfo, by = "GSE"))
+
+head(DSinfo)
+write.table(DSinfo, file = "Datasets_Experiments.txt", sep = "\t", row.names = F)
+```
+
+## Annotation with BioC packages
+```{r }
+# Install and load packages
+#getBioCPackages(DSinfo$Reannotation)
+results <- vector("list", nrow(DSinfo))
+names(results) <- GSELIST
+for (i in seq_along(results)) results[[i]] <- try(geneAnnotate(DSinfo$GSE[i], package = DSinfo$Reannotation[i], gpl = rs$GPL[i]))
+ok <- allOK(results)
+table(ok)
+```
+
+```{r }
+results <- results[ok] #
+for (i in seq_along(results)) write.table(results[1], file = paste0(names(results)[i], "_annotated.txt"), sep = "\t", row.names = F)
+```
